@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+    	
+    http://www.apache.org/licenses/LICENSE-2.0
+    	
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<beans>
+
+    <bean id="dk_magenta-htmlthumbnail.register.htmlthumbnail"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="thumbnailRegistry" />
+        <property name="targetMethod" value="addThumbnailDefinition" />
+        <property name="arguments">
+            <list>
+                <bean class="org.alfresco.repo.thumbnail.ThumbnailDefinition">
+                    <property name="name" value="html" />
+                    <property name="mimetype" value="text/html" />
+                    <property name="transformationOptions">
+                        <!-- The thumbnail definition have transformationOptions mandatory -->
+                        <!-- But there are none for html, so use SWFTransformationsOptions as dummy -->
+                        <bean class="org.alfresco.repo.content.transform.swf.SWFTransformationOptions">
+                            <property name="flashVersion" value="9" />
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+</beans>
