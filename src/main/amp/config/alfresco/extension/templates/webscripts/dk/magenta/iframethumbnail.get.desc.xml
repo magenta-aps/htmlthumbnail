@@ -1,0 +1,22 @@
+<webscript>
+    <shortname>Thumbnails</shortname>
+    <description>
+        Get a named thumbnail for a content resource.<br/>
+        The two URL templates which support a 'filename' template-arg are made available in order to
+        support scenarios (e.g. with third party libraries) where the repo URL being called includes an explicit filename suffix.<br/>
+        Note that Alfresco does not currently use the filename template-arg and that it will be ignored.
+        Therefore a GET to these URLs will return the same resource as to the equivalent URLs without it.
+
+        This script modifies the output such that a special script tag is
+        included inside the &lt;head&gt; tag of the output HTML.
+        This is to work around restrictions related to included this URL in
+        an iframe when it is requested from another site.
+        Note: The only supported thumbnailname is 'html'.
+    </description>
+    <url>/api/node/{store_type}/{store_id}/{id}/content{property}/thumbnails/iframe/{thumbnailname}?c={queueforcecreate?}&amp;ph={placeholder?}</url>
+    <url>/api/node/{store_type}/{store_id}/{id}/content{property}/thumbnails/iframe/{thumbnailname}/{filename}?c={queueforcecreate?}&amp;ph={placeholder?}</url>
+    <transaction allow="readonly">required</transaction>
+    <format default="">argument</format>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+</webscript>
