@@ -15,7 +15,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.thumbnail.ThumbnailService;
 import org.apache.commons.lang.StringUtils;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 import org.springframework.extensions.webscripts.*;
 import org.alfresco.repo.remoteconnector.RemoteConnectorServiceImpl;
 import ucar.nc2.iosp.bufr.Message;
@@ -39,6 +41,12 @@ public class HTMLIFrameThumbnailGetWebscript extends AbstractWebScript {
     private DictionaryService dictionaryService;
     private ServiceRegistry serviceRegistry;
     private ContentService contentService;
+
+    private ThumbnailService thumbnailService;
+
+    public void setThumbnailService(ThumbnailService thumbnailService) {
+        this.thumbnailService = thumbnailService;
+    }
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
@@ -75,48 +83,57 @@ public class HTMLIFrameThumbnailGetWebscript extends AbstractWebScript {
             return;
         }
 
-        String thumbnailname = templateArgs.get("thumbnailname");
-        if (StringUtils.isEmpty(thumbnailname)) {
+        String thumbnailName = templateArgs.get("thumbnailname");
+        if (StringUtils.isEmpty(thumbnailName)) {
             res.setStatus(Status.STATUS_NOT_FOUND);
             return;
         }
 
-        if (!thumbnailname.equals("html")) {
+        if (!thumbnailName.equals("html")) {
             throw new WebScriptException(HttpServletResponse.SC_BAD_REQUEST,
                     "This script only supports returning 'html' thumbnails");
         }
 
-        String queueforcecreate = templateArgs.get("queueforcecreate");
-        boolean qc = false;
-        boolean fc = false;
-        if (StringUtils.isNotEmpty(queueforcecreate)) {
-            if (queueforcecreate.equals("queue")) {
-                qc = true;
-            } else if (queueforcecreate.equals("force")) {
-                fc = true;
-            }
-        }
-
-        Scriptable scope = new BaseScopableProcessorExtension().getScope();
+        NodeRef thumbnailNodeRef = thumbnailService.getThumbnailByName(nodeRef, ContentModel.PROP_CONTENT, thumbnailName);
+        Context cx = Context.enter();
+        Scriptable scope = cx.initStandardObjects();
         ScriptNode scriptNode = new ScriptNode(nodeRef, serviceRegistry, scope);
-
-        ScriptThumbnail thumbnail = scriptNode.getThumbnail(thumbnailname);
-        if (thumbnail == null) {
-            if (fc) {
-                thumbnail = scriptNode.createThumbnail(thumbnailname, false, true);
+        ScriptThumbnail thumbnail = scriptNode.getThumbnail(thumbnailName);
+        if (thumbnail == null || thumbnail.getSize() == 0) {
+            // Remove broken thumbnail
+            if (thumbnail != null) {
+                thumbnail.remove();
             }
-            else
-            {
-                if (qc) {
-                    scriptNode.createThumbnail(thumbnailname, true);
-                }
 
-                res.setStatus(Status.STATUS_NOT_FOUND);
-                return;
+            // Get the queue/force create setting
+            String c = req.getParameter("c");
+            boolean qc = false;
+            boolean fc = false;
+            if (StringUtils.isNotEmpty(c)) {
+                if (c.equals("queue")) {
+                    qc = true;
+                } else if (c.equals("force")) {
+                    fc = true;
+                }
+            }
+
+            if (fc) {
+                thumbnail = scriptNode.createThumbnail(thumbnailName, false, true);
+                if (thumbnail != null) {
+                    thumbnailNodeRef = thumbnail.getNodeRef();
+                }
+            } else {
+                if (qc) {
+                    scriptNode.createThumbnail(thumbnailName, true);
+                }
+            }
+
+            if (thumbnailNodeRef == null) {
+                throw new WebScriptException(HttpServletResponse.SC_NOT_FOUND, "Thumbnail was not found");
             }
         }
 
-        NodeRef thumbnailNodeRef = thumbnail.getNodeRef();
+
         ContentReader reader = contentService.getReader(thumbnailNodeRef, ContentModel.PROP_CONTENT);
         if (!reader.getMimetype().equals(MimetypeMap.MIMETYPE_HTML)) {
             throw new WebScriptException(HttpServletResponse.SC_BAD_REQUEST,

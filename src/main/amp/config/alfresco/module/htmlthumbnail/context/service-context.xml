@@ -23,6 +23,7 @@
           parent="webscript">
         <property name="contentService" ref="ContentService"/>
         <property name="nodeService" ref="NodeService"/>
+        <property name="thumbnailService" ref="ThumbnailService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="stringToInsertInHeadTag">

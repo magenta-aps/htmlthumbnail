@@ -13,8 +13,8 @@
         an iframe when it is requested from another site.
         Note: The only supported thumbnailname is 'html'.
     </description>
-    <url>/api/node/{store_type}/{store_id}/{id}/content{property}/thumbnails/iframe/{thumbnailname}?c={queueforcecreate?}&amp;ph={placeholder?}</url>
-    <url>/api/node/{store_type}/{store_id}/{id}/content{property}/thumbnails/iframe/{thumbnailname}/{filename}?c={queueforcecreate?}&amp;ph={placeholder?}</url>
+    <url>/api/node/{store_type}/{store_id}/{id}/content{property}/thumbnails/iframe/{thumbnailname}?c={queueforcecreate?}</url>
+    <url>/api/node/{store_type}/{store_id}/{id}/content{property}/thumbnails/iframe/{thumbnailname}/{filename}?c={queueforcecreate?}</url>
     <transaction allow="readonly">required</transaction>
     <format default="">argument</format>
     <authentication>user</authentication>
