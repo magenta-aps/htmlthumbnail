@@ -18,44 +18,6 @@
 -->
 <beans>
 
-    <bean id="webscript.dk.magenta.iframethumbnail.get"
-          class="dk.magenta.webscripts.HTMLIFrameThumbnailGetWebscript"
-          parent="webscript">
-        <property name="contentService" ref="ContentService"/>
-        <property name="nodeService" ref="NodeService"/>
-        <property name="thumbnailService" ref="ThumbnailService"/>
-        <property name="dictionaryService" ref="dictionaryService"/>
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-        <property name="stringToInsertInHeadTag">
-            <!-- The following script is inserted into the <head> tag.
-
-            It posts the iframe's height to the parent window on load.
-            -->
-            <value><![CDATA[
-    <script>
-    (function() {
-        function getHeight() {
-            var body = document.body, html = document.documentElement;
-            return Math.max(body.scrollHeight, body.offsetHeight, html.offsetHeight);
-        }
-        function onload() {
-            window.parent.postMessage({iframeHeight:getHeight()}, '*');
-        }
-
-        if (window.addEventListener) {
-            window.addEventListener('load', onload);
-        }
-        else if (window.attachEvent) {
-            window.attachEvent('onload', onload);
-        }
-        else {
-            window.onload = onload;
-        }
-    })();
-    </script>
-                ]]></value>
-        </property>
-    </bean>
 
     <bean id="dk_magenta-htmlthumbnail.register.htmlthumbnail"
           class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
