@@ -26,6 +26,7 @@
              Uncomment if you need to change (Note. current default version for Enterprise edition is 5.0.1)
           <alfresco.version>5.0.d</alfresco.version>
           <alfresco.data.location>/absolute/path/to/alf_data_dev</alfresco.data.location> -->
+        <alfresco.version>5.0.c</alfresco.version>
 
         <!-- This control the root logging level for all apps uncomment and change, defaults to WARN
             <app.log.root.level>WARN</app.log.root.level>

@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+    <bean id="transformer.worker.pdf2htmlex"
+          class="org.alfresco.repo.content.transform.RuntimeExecutableContentTransformerWorker">
+        <property name="mimetypeService">
+            <ref bean="mimetypeService"/>
+        </property>
+        <property name="checkCommand">
+            <bean class="org.alfresco.util.exec.RuntimeExec">
+                <property name="commandsAndArguments">
+                    <map>
+                        <entry key=".*">
+                            <list>
+                                <value>pdf2htmlEX</value>
+                                <value>-v</value>
+                            </list>
+                        </entry>
+                    </map>
+                </property>
+                <!--<property name="errorCodes">
+                    <value>1</value>
+                </property>-->
+            </bean>
+        </property>
+        <property name="transformCommand">
+            <bean class="org.alfresco.util.exec.RuntimeExec">
+                <property name="commandsAndArguments">
+                    <map>
+                        <entry key=".*">
+                            <list>
+                                <value>pdf2htmlEX</value>
+                                <value>--embed</value>
+                                <value>CFIJO</value>
+                                <value>${source}</value>
+                                <value>${target}</value>
+                            </list>
+                        </entry>
+                    </map>
+                </property>
+                <property name="processDirectory" value="/"/>
+            </bean>
+        </property>
+        <property name="explicitTransformations">
+            <list>
+                <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
+                    <constructor-arg>
+                        <value>application/pdf</value>
+                    </constructor-arg>
+                    <constructor-arg>
+                        <value>text/html</value>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transformer.pdf2htmlex" class="org.alfresco.repo.content.transform.ProxyContentTransformer"
+          init-method="register"
+          parent="baseContentTransformer">
+        <property name="worker" ref="transformer.worker.pdf2htmlex"/>
+        <!--The next two were added this because of the line at
+        https://github.com/Alfresco/community-edition/blob/afde3f58f91567b6f7eaa0bbac5e5adc38087fe0/projects/repository/
+        source/java/org/alfresco/repo/content/transform/AbstractContentTransformer2.java#L135 due to getting the
+        following error on startup:
+        Cannot create dynamic transformer transformer.complex.Xlsx.Html as sub transformers could not be found or
+        created ("*|pdf|pdf2htmlex"). Incidentall it had no effect as the transformer properties need to be in the form
+        *|pdf|*; but just in this chnages with future release of alfresco we leave this here.
+        -->
+        <property name="registry" ref="contentTransformerRegistry"/>
+        <property name="registerTransformer" value="true"/>
+    </bean>
+</beans>
