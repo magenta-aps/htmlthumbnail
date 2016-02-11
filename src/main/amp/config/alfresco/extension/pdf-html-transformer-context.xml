@@ -71,4 +71,64 @@
         <property name="registry" ref="contentTransformerRegistry"/>
         <property name="registerTransformer" value="true"/>
     </bean>
+
+    <bean id="transformer.worker.excel2html"
+          class="org.alfresco.repo.content.transform.RuntimeExecutableContentTransformerWorker">
+        <property name="mimetypeService">
+            <ref bean="mimetypeService"/>
+        </property>
+        <property name="checkCommand">
+            <bean class="org.alfresco.util.exec.RuntimeExec">
+                <property name="commandsAndArguments">
+                    <map>
+                        <entry key=".*">
+                            <list>
+                                <value>${python.exe}</value>
+                                <value>--version</value>
+                            </list>
+                        </entry>
+                    </map>
+                </property>
+                <!--<property name="errorCodes">
+                    <value>1</value>
+                </property>-->
+            </bean>
+        </property>
+        <property name="transformCommand">
+            <bean class="org.alfresco.util.exec.RuntimeExec">
+                <property name="commandsAndArguments">
+                    <map>
+                        <entry key=".*">
+                            <list>
+                                <value>${python.exe}</value>
+                                <!--until we figure out how to resolve the classpath-->
+                                <!--<value>classpath:alfresco/extension/scripts/python/excel2html.py</value>-->
+                                <value>${python.excel2html.script}</value>
+                                <value>${ooo.exe}</value>
+                                <value>${source}</value>
+                                <value>${target}</value>
+                            </list>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="explicitTransformations">
+            <list>
+                <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
+                    <constructor-arg value="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+                    <constructor-arg value="text/html"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transformer.excel2html" class="org.alfresco.repo.content.transform.ProxyContentTransformer"
+          init-method="register"
+          parent="baseContentTransformer">
+        <property name="worker" ref="transformer.worker.excel2html"/>
+        <property name="registry" ref="contentTransformerRegistry"/>
+        <property name="registerTransformer" value="true"/>
+    </bean>
+
 </beans>
