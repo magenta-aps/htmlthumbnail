@@ -114,9 +114,28 @@
             </bean>
         </property>
         <property name="explicitTransformations">
+            <!--For mimetypes list see: -->
+            <!--https://github.com/Alfresco/community-edition/blob/3b6fdc1c77659d5160e8f2021cccb9db26902ee4/projects/
+            repository/config/alfresco/mimetype/openoffice-document-formats.xml-->
             <list>
+                <!--MS Excel 2007-->
                 <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
                     <constructor-arg value="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+                    <constructor-arg value="text/html"/>
+                </bean>
+                <!--MS Excel 97-->
+                <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
+                    <constructor-arg value="application/vnd.ms-excel"/>
+                    <constructor-arg value="text/html"/>
+                </bean>
+                <!--Microsoft Word 2007-->
+                <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
+                    <constructor-arg value="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+                    <constructor-arg value="text/html"/>
+                </bean>
+                <!--MS Word 97-->
+                <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
+                    <constructor-arg value="application/msword"/>
                     <constructor-arg value="text/html"/>
                 </bean>
             </list>
