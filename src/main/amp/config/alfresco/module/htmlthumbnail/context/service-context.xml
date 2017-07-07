@@ -18,7 +18,6 @@
 -->
 <beans>
 
-
     <bean id="dk_magenta-htmlthumbnail.register.htmlthumbnail"
           class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="targetObject" ref="thumbnailRegistry" />
