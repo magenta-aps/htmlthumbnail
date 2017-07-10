@@ -40,10 +40,12 @@ INTERIM_FILE = INTERIM_FILE.replace("\ ", " ")
 
 #Look in the current directory and base 64 encode all png files into a map with the original src values as keys
 #(Extremely expensive. I know)
-for file in glob.glob("*.png"):
-    with open(file, 'rb') as fh:
-        #add to the map
-        encodedFiles[file] = fh.read().encode('base64').replace('\n', '')
+image_list = glob.glob("*.png")
+if len(image_list) > 0:
+    for file in image_list:
+        with open(file, 'rb') as fh:
+            #add to the map
+            encodedFiles[file] = fh.read().encode('base64').replace('\n', '')
 
 # Look for the and replace the urlencoded string in the html file
 HTMLFILE = open(os.path.abspath(INTERIM_FILE), 'r+')

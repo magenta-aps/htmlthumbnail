@@ -19,9 +19,9 @@
                         </entry>
                     </map>
                 </property>
-                <!--<property name="errorCodes">
-                    <value>1</value>
-                </property>-->
+                <property name="errorCodes">
+                    <value>1,2</value>
+                </property>
             </bean>
         </property>
         <property name="transformCommand">
@@ -41,29 +41,29 @@
                         </entry>
                     </map>
                 </property>
+                <property name="waitForCompletion">
+                    <value>true</value>
+                </property>
             </bean>
         </property>
-        <property name="explicitTransformations">
-            <!--For mimetypes list see: -->
-            <!--https://github.com/Alfresco/community-edition/blob/3b6fdc1c77659d5160e8f2021cccb9db26902ee4/projects/
-            repository/config/alfresco/mimetype/openoffice-document-formats.xml-->
+       <!-- <property name="explicitTransformations">
+            &lt;!&ndash;For mimetypes list see: &ndash;&gt;
+            &lt;!&ndash;https://github.com/Alfresco/community-edition/blob/3b6fdc1c77659d5160e8f2021cccb9db26902ee4/projects/
+            repository/config/alfresco/mimetype/openoffice-document-formats.xml&ndash;&gt;
             <list>
-                <!--pdf-->
+                &lt;!&ndash;pdf&ndash;&gt;
                 <bean class="org.alfresco.repo.content.transform.ExplictTransformationDetails">
-                    <!--source mimetype-->
+                    &lt;!&ndash;source mimetype&ndash;&gt;
                     <constructor-arg value="application/pdf"/>
-                    <!--target mimetype-->
+                    &lt;!&ndash;target mimetype&ndash;&gt;
                     <constructor-arg value="text/html"/>
                 </bean>
             </list>
-        </property>
+        </property>-->
     </bean>
 
     <bean id="transformer.pdfToHtmlPy" class="org.alfresco.repo.content.transform.ProxyContentTransformer"
-          init-method="register"
           parent="baseContentTransformer">
         <property name="worker" ref="transformer.worker.pdfToHtmlPy"/>
-        <property name="registry" ref="contentTransformerRegistry"/>
-        <property name="registerTransformer" value="true"/>
     </bean>
 </beans>
