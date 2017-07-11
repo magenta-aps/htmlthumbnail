@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.magenta</groupId>
-    <artifactId>htmlthumbnail</artifactId>
+    <artifactId>html-thumbnail-generator</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>HTML Thumbnail generator</name>
+    <name>Alfresco platform HTML thumbnail generator</name>
     <description>
         Alfresco HTML thumbnail generator that converts implements a complex pipeline for converting documents
         and spreadsheets to html. SDK 3.0.1 compatible project
