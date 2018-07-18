@@ -1,4 +1,5 @@
 .idea
 *.iml
+*.log
 alf_data_dev
 target

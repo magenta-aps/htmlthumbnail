@@ -1,5 +1,6 @@
-# htmlthumbnail
-HTML thumbnail generation for Alfresco nodes. Registers a thumbnail type called "html" which will render an HTML rendition of an Alfresco node, if possible. Useful if you need HTML previews of nodes.
+# html-thumbnail-generator
+HTML thumbnail generation for Alfresco nodes. Registers a thumbnail type called "html" which will render an HTML 
+rendition of an Alfresco node, if possible. Useful if you need HTML previews of nodes.
 
 # Install
 
